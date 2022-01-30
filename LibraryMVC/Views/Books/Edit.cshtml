@@ -1,0 +1,9 @@
+﻿@model Book
+<h1>Edit Book</h1>
+
+@using (Html.BeginForm("Edit", "Books")){
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Title, new { @class="form-label" })
+        @Html.TextBoxFor(m => m.Title, new{ @class="form-control", @placeholder="Enter a Title" })
+    </div>
+}

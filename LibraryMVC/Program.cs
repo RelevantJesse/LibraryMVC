@@ -15,6 +15,8 @@ builder.Services.AddDbContext<LibraryDbContext>(o => o.UseSqlServer(connectionSt
 
 builder.Services.AddScoped<BooksService>();
 
+builder.Services.AddScoped<AuthorsService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

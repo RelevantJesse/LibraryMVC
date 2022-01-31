@@ -1,9 +1,28 @@
-﻿@model Book
+﻿@model EditBookViewModel
 <h1>Edit Book</h1>
 
 @using (Html.BeginForm("Edit", "Books")){
     <div class="mb-3">
-        @Html.LabelFor(m => m.Title, new { @class="form-label" })
-        @Html.TextBoxFor(m => m.Title, new{ @class="form-control", @placeholder="Enter a Title" })
+        @Html.LabelFor(m => m.Book.Title, new { @class="form-label" })
+        @Html.TextBoxFor(m => m.Book.Title, new{ @class="form-control", @placeholder="Enter a Title" })
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Book.ISBN, new { @class="form-label" })
+        @Html.TextBoxFor(m => m.Book.ISBN, new{ @class="form-control", @placeholder="Enter ISBN" })
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Book.Year, new { @class="form-label" })
+        @Html.TextBoxFor(m => m.Book.Year, new{ @class="form-control", @placeholder="Enter a Year" })
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Book.Author, new { @class="form-label" })
+        @Html.DropDownListFor(m => m.Book.Author, Model?.Authors ?? new List<SelectListItem>(), new{ @class="form-control" })
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(m => m.Book.Genre, new { @class="form-label" })
+        @Html.DropDownListFor(m => m.Book.Genre, Model?.Genres ?? new List<SelectListItem>(), new{ @class="form-control" })
+    </div>
+    <div class="mb-3">
+        <button type="submit">Save</button>
     </div>
 }

@@ -1,6 +1,9 @@
 ﻿using LibraryMVC.BL;
 using LibraryMVC.Data;
+using LibraryMVC.Data.Models;
+using LibraryMVC.UI.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace LibraryMVC.UI.Controllers
@@ -8,10 +11,12 @@ namespace LibraryMVC.UI.Controllers
     public class BooksController : Controller
     {
         private readonly BooksService _booksService;
+        private readonly AuthorsService _authorsService;
 
-        public BooksController(BooksService booksService)
+        public BooksController(BooksService booksService, AuthorsService authorsService)
         {
             _booksService = booksService;
+            _authorsService = authorsService;
         }
 
         public async Task<IActionResult> Index()
@@ -24,7 +29,24 @@ namespace LibraryMVC.UI.Controllers
         public async Task<IActionResult> Edit(int id)
         {
             var book = await _booksService.GetBookByIdAsync(id);
-            return View(book);
+            var authors = await _authorsService.GetAuthorsAsync();
+            var genres = Enum.GetValues(typeof(Genre)).Cast<Genre>().ToList();
+            var vm = new EditBookViewModel();
+            vm.Book = book;
+            vm.Authors = authors.Select(a => new SelectListItem { Value = a.Id.ToString(), Text = a.FirstName + " " + a.LastName });
+            vm.Genres = genres.Select(g => new SelectListItem { Value = ((int)g).ToString(), Text = g.ToString() });
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Book book)
+        {
+            if (!await _booksService.UpdateBookAsync(book))
+            {
+                return View(book);
+            }
+            return RedirectToAction("Index");
         }
     }
 }

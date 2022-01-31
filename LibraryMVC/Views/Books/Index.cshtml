@@ -8,6 +8,7 @@
             <th>Year</th>
             <th>Author</th>
             <th>Genre</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -19,6 +20,7 @@
                 <td>@book.Year</td>
                 <td>@book.Author.FirstName @book.Author.LastName</td>
                 <td>@book.Genre</td>
+                <td><button onclick="@("window.location.href='" + @Url.Action("Edit", "Books", new { id = book.Id }) + "'");">Edit</button></td>
             </tr>
         }
     </tbody>

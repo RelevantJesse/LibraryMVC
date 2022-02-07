@@ -20,7 +20,10 @@
                 <td>@book.Year</td>
                 <td>@book.Author.FirstName @book.Author.LastName</td>
                 <td>@book.Genre</td>
-                <td><button onclick="@("window.location.href='" + @Url.Action("Edit", "Books", new { id = book.Id }) + "'");">Edit</button></td>
+                <td>
+                    <button class="btn btn-primary" onclick="@("window.location.href='" + @Url.Action("Edit", "Books", new { id = book.Id }) + "'");">Edit</button>
+                    <button class="btn btn-danger" onclick="@("window.location.href='" + @Url.Action("Delete", "Books", new { id = book.Id }) + "'");">Delete</button>
+                </td>
             </tr>
         }
     </tbody>

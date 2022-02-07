@@ -2,6 +2,7 @@
 <h1>Edit Book</h1>
 
 @using (Html.BeginForm("Edit", "Books")){
+    @Html.HiddenFor(m => m.Book.Id)
     <div class="mb-3">
         @Html.LabelFor(m => m.Book.Title, new { @class="form-label" })
         @Html.TextBoxFor(m => m.Book.Title, new{ @class="form-control", @placeholder="Enter a Title" })
@@ -16,13 +17,14 @@
     </div>
     <div class="mb-3">
         @Html.LabelFor(m => m.Book.Author, new { @class="form-label" })
-        @Html.DropDownListFor(m => m.Book.Author, Model?.Authors ?? new List<SelectListItem>(), new{ @class="form-control" })
+        @Html.DropDownListFor(m => m.Book.Author.Id, Model?.Authors ?? new List<SelectListItem>(), new{ @class="form-control" })
     </div>
     <div class="mb-3">
         @Html.LabelFor(m => m.Book.Genre, new { @class="form-label" })
         @Html.DropDownListFor(m => m.Book.Genre, Model?.Genres ?? new List<SelectListItem>(), new{ @class="form-control" })
     </div>
     <div class="mb-3">
-        <button type="submit">Save</button>
+        <button class="btn btn-primary" type="submit">Save</button>
+        <a class="btn btn-danger" asp-area="" asp-controller="Books" asp-action="Index">Cancel</a>
     </div>
 }

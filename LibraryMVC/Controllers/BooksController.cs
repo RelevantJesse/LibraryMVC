@@ -44,8 +44,22 @@ namespace LibraryMVC.UI.Controllers
         {
             if (!await _booksService.UpdateBookAsync(book))
             {
-                return View(book);
+                EditBookViewModel vm = new();
+                vm.Book = book;
+                var authors = await _authorsService.GetAuthorsAsync();
+                var genres = Enum.GetValues(typeof(Genre)).Cast<Genre>().ToList();
+                vm.Authors = authors.Select(a => new SelectListItem { Value = a.Id.ToString(), Text = a.FirstName + " " + a.LastName });
+                vm.Genres = genres.Select(g => new SelectListItem { Value = ((int)g).ToString(), Text = g.ToString() });
+
+                return View(vm);
             }
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _booksService.DeleteBookById(id);
+
             return RedirectToAction("Index");
         }
     }

@@ -26,20 +26,35 @@ namespace LibraryMVC.BL
                 return false;
             }
 
+            var author = await _context.Authors.FirstOrDefaultAsync(a => a.Id == book.Author.Id);
+
+            if (author == null)
+            {
+                return false;
+            }
+
             existingBook.Title = book.Title;
-            existingBook.Author = book.Author;
+            existingBook.Author = author;
             existingBook.Year = book.Year;
             existingBook.Genre = book.Genre;
             existingBook.ISBN = book.ISBN;
 
-            int saved = await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
-            return saved == 1;
+            return true;
         }
         
         public async Task<Book> GetBookByIdAsync(int id)
         {
-            return await _context.Books.Include(b => b.Author).FirstOrDefaultAsync(a => a.Id == id);
+            return await _context.Books.Include(b => b.Author).FirstOrDefaultAsync(a => a.Id == id) ?? new Book();
+        }
+
+        public async Task<bool> DeleteBookById(int id)
+        {
+            var book = await GetBookByIdAsync(id);
+            _context.Books.Remove(book);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }

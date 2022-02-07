@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace LibraryMVC.UI.ViewModels
 {
-    public class EditBookViewModel
+    public class AddEditBookViewModel
     {
         public Book Book { get; set; }
         public IEnumerable<SelectListItem> Authors { get; set; }

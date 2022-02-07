@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Author>
+
+<button class="btn btn-primary" onclick="@("window.location.href='" + @Url.Action("AddAuthor", "Authors") + "'");">Add Author</button>
+<table class="table table-dark">
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Author author in Model)
+        {
+            <tr>
+                <td>@author.FirstName</td>
+                <td>@author.LastName</td>
+                <td>
+                    <button class="btn btn-primary" onclick="@("window.location.href='" + @Url.Action("Edit", "Authors", new { id = author.Id }) + "'");">Edit</button>
+                    <button class="btn btn-danger" onclick="@("window.location.href='" + @Url.Action("Delete", "Authors", new { id = author.Id }) + "'");">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

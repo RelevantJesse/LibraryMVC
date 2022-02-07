@@ -1,7 +1,7 @@
 ﻿@model AddEditBookViewModel
-<h1>Edit Book</h1>
+<h1>Add Book</h1>
 
-@using (Html.BeginForm("Edit", "Books")){
+@using (Html.BeginForm("AddBook", "Books")){
     @Html.HiddenFor(m => m.Book.Id)
     <div class="mb-3">
         @Html.LabelFor(m => m.Book.Title, new { @class="form-label" })
@@ -17,11 +17,11 @@
     </div>
     <div class="mb-3">
         @Html.LabelFor(m => m.Book.Author, new { @class="form-label" })
-        @Html.DropDownListFor(m => m.Book.Author.Id, Model?.Authors ?? new List<SelectListItem>(), new{ @class="form-control" })
+        @Html.DropDownListFor(m => m.Book.Author.Id, Model?.Authors ?? new List<SelectListItem>(), new{ @class="form-select" })
     </div>
     <div class="mb-3">
         @Html.LabelFor(m => m.Book.Genre, new { @class="form-label" })
-        @Html.DropDownListFor(m => m.Book.Genre, Model?.Genres ?? new List<SelectListItem>(), new{ @class="form-control" })
+        @Html.DropDownListFor(m => m.Book.Genre, Model?.Genres ?? new List<SelectListItem>(), new{ @class="form-select" })
     </div>
     <div class="mb-3">
         <button class="btn btn-primary" type="submit">Save</button>

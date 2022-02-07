@@ -12,6 +12,8 @@ namespace LibraryMVC.UI.Controllers
     {
         private readonly BooksService _booksService;
         private readonly AuthorsService _authorsService;
+        private IEnumerable<SelectListItem> _authors;
+        private IEnumerable<SelectListItem> _genres;
 
         public BooksController(BooksService booksService, AuthorsService authorsService)
         {
@@ -22,19 +24,18 @@ namespace LibraryMVC.UI.Controllers
         public async Task<IActionResult> Index()
         {
             var books = await _booksService.GetBooksAsync();
-           
+
             return View(books);
         }
 
         public async Task<IActionResult> Edit(int id)
         {
             var book = await _booksService.GetBookByIdAsync(id);
-            var authors = await _authorsService.GetAuthorsAsync();
-            var genres = Enum.GetValues(typeof(Genre)).Cast<Genre>().ToList();
-            var vm = new EditBookViewModel();
+            
+            var vm = new AddEditBookViewModel();
             vm.Book = book;
-            vm.Authors = authors.Select(a => new SelectListItem { Value = a.Id.ToString(), Text = a.FirstName + " " + a.LastName });
-            vm.Genres = genres.Select(g => new SelectListItem { Value = ((int)g).ToString(), Text = g.ToString() });
+            vm.Authors = await GetAuthors();
+            vm.Genres = GetGenres();
 
             return View(vm);
         }
@@ -44,23 +45,65 @@ namespace LibraryMVC.UI.Controllers
         {
             if (!await _booksService.UpdateBookAsync(book))
             {
-                EditBookViewModel vm = new();
-                vm.Book = book;
-                var authors = await _authorsService.GetAuthorsAsync();
-                var genres = Enum.GetValues(typeof(Genre)).Cast<Genre>().ToList();
-                vm.Authors = authors.Select(a => new SelectListItem { Value = a.Id.ToString(), Text = a.FirstName + " " + a.LastName });
-                vm.Genres = genres.Select(g => new SelectListItem { Value = ((int)g).ToString(), Text = g.ToString() });
+                AddEditBookViewModel vm = new();
+                vm.Book = book;             
+                vm.Authors = await GetAuthors();
+                vm.Genres = GetGenres();
 
                 return View(vm);
             }
             return RedirectToAction("Index");
         }
 
+        public async Task<IActionResult> AddBook()
+        {
+            var vm = new AddEditBookViewModel();
+            vm.Book = new Book();
+            vm.Authors = await GetAuthors();
+            vm.Genres = GetGenres();
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddBook(Book book)
+        {
+            if (!await _booksService.AddBookAsync(book))
+            {
+                AddEditBookViewModel vm = new();
+                vm.Book = book;
+                vm.Authors = await GetAuthors();
+                vm.Genres = GetGenres();
+
+                return View(vm);
+            }
+            return RedirectToAction("Index");
+        }
         public async Task<IActionResult> Delete(int id)
         {
             await _booksService.DeleteBookById(id);
 
             return RedirectToAction("Index");
+        }
+
+        private async Task<IEnumerable<SelectListItem>> GetAuthors()
+        {
+            if (_authors == null)
+            {
+                var authors = await _authorsService.GetAuthorsAsync();
+                _authors = authors.Select(a => new SelectListItem { Value = a.Id.ToString(), Text = a.FirstName + " " + a.LastName });
+            }
+            return _authors;
+        }
+
+        private IEnumerable<SelectListItem> GetGenres()
+        {
+            if (_genres == null)
+            {
+                var genres = Enum.GetValues(typeof(Genre)).Cast<Genre>().ToList();
+                _genres = genres.Select(g => new SelectListItem { Value = ((int)g).ToString(), Text = g.ToString() });
+            }
+            return _genres;
         }
     }
 }

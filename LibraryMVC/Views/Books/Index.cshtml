@@ -1,5 +1,7 @@
 ﻿@model IEnumerable<Book>
 
+
+<button class="btn btn-primary" onclick="@("window.location.href='" + @Url.Action("AddBook", "Books") + "'");">Add Book</button>
 <table class="table table-dark">
     <thead>
         <tr>

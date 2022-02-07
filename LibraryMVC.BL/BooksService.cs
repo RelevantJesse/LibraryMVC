@@ -44,6 +44,21 @@ namespace LibraryMVC.BL
             return true;
         }
         
+        public async Task<bool> AddBookAsync(Book book)
+        {
+            if (book == null)
+                return false;
+
+            var author = await _context.Authors.FirstOrDefaultAsync(a => a.Id == book.Author.Id);
+
+            if (author == null)
+                return false;
+
+            book.Author = author;
+            await _context.Books.AddAsync(book);
+            await _context.SaveChangesAsync();
+            return true;
+        }
         public async Task<Book> GetBookByIdAsync(int id)
         {
             return await _context.Books.Include(b => b.Author).FirstOrDefaultAsync(a => a.Id == id) ?? new Book();

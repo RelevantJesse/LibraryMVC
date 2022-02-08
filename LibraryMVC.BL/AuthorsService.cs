@@ -23,6 +23,11 @@ namespace LibraryMVC.BL
             return await _context.Authors.ToListAsync();
         }
 
+        public async Task<Author> GetAuthorByIdAsync(int id)
+        {
+            return await _context.Authors.FirstOrDefaultAsync(a => a.Id == id);
+        }
+
         public async Task<bool> AddAuthorAsync(Author author)
         {
             await _context.Authors.AddAsync(author);

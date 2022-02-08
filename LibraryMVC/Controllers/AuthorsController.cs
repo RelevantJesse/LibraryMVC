@@ -38,6 +38,27 @@ namespace LibraryMVC.UI.Controllers
         }
 
 
-        // We created the service methods. Need to use them now
+        public async Task<IActionResult> Edit(int id)
+        {
+            var author = await _authorsService.GetAuthorByIdAsync(id);
+            return View(author);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(Author author)
+        {
+            if (!await _authorsService.UpdateAuthorAsync(author))
+            {
+                return View(author);
+            }
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _authorsService.DeleteAuthorAsync(id);
+
+            return RedirectToAction("Index");
+        }
     }
 }

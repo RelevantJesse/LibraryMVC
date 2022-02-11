@@ -1,0 +1,18 @@
+﻿@model CheckOutViewModel
+
+<h1>Check Out Book</h1>
+
+@using (Html.BeginForm("CheckOut", "CheckedOut")){   
+    <div class="mb-3">
+        @Html.LabelFor(m => m.CheckedOut.Book, new { @class="form-label" })
+        @Html.DropDownListFor(m => m.CheckedOut.Book.Id, Model?.Books ?? new List<SelectListItem>(), new{ @class="form-select" })
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(m => m.CheckedOut.Member, new { @class="form-label" })
+        @Html.DropDownListFor(m => m.CheckedOut.Member.Id, Model?.Members ?? new List<SelectListItem>(), new{ @class="form-select" })
+    </div>
+    <div class="mb-3">
+        <button class="btn btn-primary" type="submit">Save</button>
+        <a class="btn btn-danger" asp-area="" asp-controller="CheckedOut" asp-action="Index">Cancel</a>
+    </div>
+}

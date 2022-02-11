@@ -2,6 +2,7 @@
 
 using LibraryMVC.BL;
 using LibraryMVC.Data;
+using LibraryMVC.Data.Models;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,9 +14,13 @@ var connectionString = builder.Configuration.GetConnectionString("Default");
 
 builder.Services.AddDbContext<LibraryDbContext>(o => o.UseSqlServer(connectionString));
 
-builder.Services.AddScoped<BooksService>();
+builder.Services.AddScoped<IService<Book>, BooksService>();
 
-builder.Services.AddScoped<AuthorsService>();
+builder.Services.AddScoped<IService<Author>, AuthorsService>();
+
+builder.Services.AddScoped<IService<Member>, MembersService>();
+
+builder.Services.AddScoped<CheckOutService>();
 
 var app = builder.Build();
 

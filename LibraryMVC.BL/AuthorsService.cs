@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace LibraryMVC.BL
 {
-    public class AuthorsService
+    public class AuthorsService : IService<Author>
     {
         private readonly LibraryDbContext _context;
 
@@ -18,24 +18,24 @@ namespace LibraryMVC.BL
             _context = context;
         }
 
-        public async Task<IEnumerable<Author>> GetAuthorsAsync()
+        public async Task<IEnumerable<Author>> GetAllAsync()
         {
             return await _context.Authors.ToListAsync();
         }
 
-        public async Task<Author> GetAuthorByIdAsync(int id)
+        public async Task<Author> GetByIdAsync(int id)
         {
             return await _context.Authors.FirstOrDefaultAsync(a => a.Id == id);
         }
 
-        public async Task<bool> AddAuthorAsync(Author author)
+        public async Task<bool> AddAsync(Author author)
         {
             await _context.Authors.AddAsync(author);
             await _context.SaveChangesAsync();
             return true;
         }
 
-        public async Task<bool> UpdateAuthorAsync(Author author)
+        public async Task<bool> UpdateAsync(Author author)
         {
             Author existingAuthor = await _context.Authors.FirstOrDefaultAsync(a => a.Id == author.Id);
             if (existingAuthor == null)
@@ -48,7 +48,7 @@ namespace LibraryMVC.BL
             return true;
         }
 
-        public async Task<bool> DeleteAuthorAsync(int id)
+        public async Task<bool> DeleteByIdAsync(int id)
         {
             Author author = await _context.Authors.FirstOrDefaultAsync(a => a.Id == id);
 

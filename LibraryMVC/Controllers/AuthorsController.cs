@@ -1,5 +1,4 @@
 ﻿using LibraryMVC.BL;
-using LibraryMVC.Data;
 using LibraryMVC.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,16 +6,16 @@ namespace LibraryMVC.UI.Controllers
 {
     public class AuthorsController : Controller
     {
-        private readonly AuthorsService _authorsService;
+        private readonly IService<Author> _authorsService;
 
-        public AuthorsController(AuthorsService authorsService)
+        public AuthorsController(IService<Author> authorsService)
         {
             _authorsService = authorsService;
         }
 
         public async Task<IActionResult> Index()
         {     
-            var authors = await _authorsService.GetAuthorsAsync();
+            var authors = await _authorsService.GetAllAsync();
 
             return View(authors);
         }
@@ -30,7 +29,7 @@ namespace LibraryMVC.UI.Controllers
         [HttpPost]
         public async Task<IActionResult> AddAuthor(Author author)
         {
-            if (!await _authorsService.AddAuthorAsync(author))
+            if (!await _authorsService.AddAsync(author))
             {
                 return View(author);
             }
@@ -40,14 +39,14 @@ namespace LibraryMVC.UI.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-            var author = await _authorsService.GetAuthorByIdAsync(id);
+            var author = await _authorsService.GetByIdAsync(id);
             return View(author);
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(Author author)
         {
-            if (!await _authorsService.UpdateAuthorAsync(author))
+            if (!await _authorsService.UpdateAsync(author))
             {
                 return View(author);
             }
@@ -56,7 +55,7 @@ namespace LibraryMVC.UI.Controllers
 
         public async Task<IActionResult> Delete(int id)
         {
-            await _authorsService.DeleteAuthorAsync(id);
+            await _authorsService.DeleteByIdAsync(id);
 
             return RedirectToAction("Index");
         }

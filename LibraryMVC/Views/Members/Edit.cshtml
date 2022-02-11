@@ -1,0 +1,18 @@
+﻿@model Member
+<h1>Edit Member</h1>
+
+@using (Html.BeginForm("Edit", "Members")){
+    @Html.HiddenFor(m => m.Id)
+    <div class="mb-3">
+        @Html.LabelFor(m => m.FirstName, new { @class="form-label" })
+        @Html.TextBoxFor(m => m.FirstName, new{ @class="form-control", @placeholder="Enter First Name", @autocomplete="off" })
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(m => m.LastName, new { @class="form-label" })
+        @Html.TextBoxFor(m => m.LastName, new{ @class="form-control", @placeholder="Enter Last Name", @autocomplete="off" })
+    </div>
+    <div class="mb-3">
+        <button class="btn btn-primary" type="submit">Save</button>
+        <a class="btn btn-danger" asp-area="" asp-controller="Members" asp-action="Index">Cancel</a>
+    </div>
+}

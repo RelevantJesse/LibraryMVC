@@ -1,0 +1,43 @@
+﻿@model CheckedOutSearchViewModel
+
+@using (Html.BeginForm("SearchCheckOuts", "CheckedOut"))
+{
+    <div class="mb-3">
+        @Html.LabelFor(m => m.BookTitle, new { @class="form-label" })
+        @Html.TextBoxFor(m => m.BookTitle, new{ @class="form-control" })
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(m => m.MemberName, new { @class="form-label" })
+        @Html.TextBoxFor(m => m.MemberName, new{ @class="form-control" })
+    </div>
+    <div class="mb-3">
+        @Html.LabelFor(m => m.IsCheckedOut, new { @class="form-label" })
+        @Html.CheckBoxFor(m => m.IsCheckedOut, new{ @class="form-check-input" })
+    </div>
+    <div class="mb-3">
+        <button class="btn btn-primary" type="submit">Search</button>
+    </div>
+}
+
+
+<table class="table table-dark">
+    <thead>
+        <tr>
+            <th>Book</th>
+            <th>Member</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (CheckedOut checkedOut in Model.CheckedOuts)
+        {
+            <tr>
+                <td>@checkedOut.Book.Title</td>
+                <td>@checkedOut.Member.FirstName @checkedOut.Member.LastName</td>
+                <td>
+                    <button class="btn btn-primary" onclick="@("window.location.href='" + @Url.Action("CheckIn", "CheckedOut", new { bookId = checkedOut.Book.Id, memberId = checkedOut.Member.Id }) + "'");">Check In</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

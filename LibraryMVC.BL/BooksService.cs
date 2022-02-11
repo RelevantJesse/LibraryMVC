@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LibraryMVC.BL
 {
-    public class BooksService
+    public class BooksService : IService<Book>
     {
         private readonly LibraryDbContext _context;
 
@@ -13,11 +13,12 @@ namespace LibraryMVC.BL
             _context = context;
         }
 
-        public async Task<IEnumerable<Book>> GetBooksAsync()
+        public async Task<IEnumerable<Book>> GetAllAsync()
         {
             return await _context.Books.Include(b => b.Author).ToListAsync();
         }
-        public async Task<bool> UpdateBookAsync(Book book)
+
+        public async Task<bool> UpdateAsync(Book book)
         {
             var existingBook = await _context.Books.FirstOrDefaultAsync(b => b.Id == book.Id);
 
@@ -44,7 +45,7 @@ namespace LibraryMVC.BL
             return true;
         }
         
-        public async Task<bool> AddBookAsync(Book book)
+        public async Task<bool> AddAsync(Book book)
         {
             if (book == null)
                 return false;
@@ -59,14 +60,14 @@ namespace LibraryMVC.BL
             await _context.SaveChangesAsync();
             return true;
         }
-        public async Task<Book> GetBookByIdAsync(int id)
+        public async Task<Book> GetByIdAsync(int id)
         {
             return await _context.Books.Include(b => b.Author).FirstOrDefaultAsync(a => a.Id == id) ?? new Book();
         }
 
-        public async Task<bool> DeleteBookById(int id)
+        public async Task<bool> DeleteByIdAsync(int id)
         {
-            var book = await GetBookByIdAsync(id);
+            var book = await GetByIdAsync(id);
             _context.Books.Remove(book);
             await _context.SaveChangesAsync();
             return true;
